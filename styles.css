@@ -1,0 +1,100 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  --main-background: #f0f2f5;
+  --app-background: #ffffff;
+  --element-background: #e0e0e0;
+  --element-hover: #cccccc;
+  --textcolor: #333333;
+
+  background-color: var(--main-background);
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.main-container {
+  background-color: var(--app-background);
+  display: flex;
+  flex-direction: row;
+  padding: 1rem;
+  gap: 1rem;
+  border-radius: 10px;
+  width: 95vw;
+  height: 95vh;
+}
+
+.calculator {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.display {
+  background-color: var(--element-background);
+  color: var(--textcolor);
+  padding: 1rem;
+  text-align: right;
+  border-radius: 5px;
+  flex: 1;
+  font-size: 3rem;
+}
+
+.upper-display {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+.btn-field {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-top: 1rem;
+  flex: 3;
+}
+
+.btn {
+  background-color: var(--element-background);
+  color: var(--textcolor);
+  font-size: 2rem;
+  padding: 1rem;
+  border-radius: 5px;
+  border: none;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn:hover {
+  background-color: var(--element-hover);
+}
+
+.history {
+  flex: 1;
+  background-color: var(--element-background);
+  color: var(--textcolor);
+  padding: 1rem;
+  border-radius: 5px;
+  overflow-y: auto;
+  height: 100%;
+  text-align: right;
+  font-size: 1.5rem;
+}
+
+.history-list {
+  list-style: none;
+}
+
+.history-result {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
