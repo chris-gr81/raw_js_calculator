@@ -12,14 +12,15 @@ let equalCache = false;
 
 function validateInput(userInput) {
   if (equalCache) {
-    // If coming from equal
+    // If coming from equals
     if (validOperators.includes(userInput)) {
-      // if operator follow on equal
+      // if operator follows on equals
       operator = userInput;
       drawUpperDisplay(leftOperant + " " + operator);
       drawLowerDisplay(leftOperant);
       equalCache = false;
     } else if (validNumbers.includes(userInput)) {
+      // if number follows on equals
       inputSequence.push(Number(userInput));
       drawLowerDisplay(arrayToNumber());
       drawUpperDisplay("clear");
@@ -31,7 +32,6 @@ function validateInput(userInput) {
   } else if (!equalCache) {
     if (validNumbers.includes(userInput)) {
       // Input is a number
-
       inputSequence.push(Number(userInput));
       drawLowerDisplay(arrayToNumber());
     } else if (validOperators.includes(userInput)) {
