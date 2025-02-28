@@ -9,46 +9,83 @@ let leftOperant = null;
 let rightOperant = null;
 let operator = null;
 let equalCache = false;
-let lowerDisplay = null;
 
 function validateInput(userInput) {
   if (equalCache) {
     // If coming from equal
-  }
-  if (validNumbers.includes(userInput)) {
-    // Input is a number
-    inputSequence.push(Number(userInput));
-    drawLowerDisplay(arrayToNumber());
-  } else if (validOperators.includes(userInput)) {
-    // Input is an operator
-    if (leftOperant === null) {
-      leftOperant = arrayToNumber();
-      inputSequence = [];
+    if (validOperators.includes(userInput)) {
+      // if operator follow on equal
       operator = userInput;
       drawUpperDisplay(leftOperant + " " + operator);
-    } else if (leftOperant !== null) {
+      drawLowerDisplay(leftOperant);
+      equalCache = false;
+    } else if (validNumbers.includes(userInput)) {
+      inputSequence.push(Number(userInput));
+      drawLowerDisplay(arrayToNumber());
+      drawUpperDisplay("clear");
+      equalCache = false;
+      leftOperant = null;
+      rightOperant = null;
+      operator = null;
+    }
+  } else if (!equalCache) {
+    if (validNumbers.includes(userInput)) {
+      // Input is a number
+
+      inputSequence.push(Number(userInput));
+      drawLowerDisplay(arrayToNumber());
+    } else if (validOperators.includes(userInput)) {
+      // Input is an operator
+      if (inputSequence.length === 0) {
+        operator = userInput;
+        if (upperDisplayTarget.innerHTML !== "") {
+          upperDisplayTarget.innerHTML =
+            upperDisplayTarget.innerHTML.slice(0, -1) + operator;
+        }
+      } else {
+        if (leftOperant === null) {
+          leftOperant = arrayToNumber();
+          operator = userInput;
+          inputSequence = [];
+          drawUpperDisplay(
+            upperDisplayTarget.innerHTML + " " + leftOperant + " " + operator
+          );
+        } else if (leftOperant !== null) {
+          rightOperant = arrayToNumber();
+          leftOperant = calcExpression();
+          operator = userInput;
+          inputSequence = [];
+          drawUpperDisplay(
+            upperDisplayTarget.innerHTML + " " + rightOperant + " " + operator
+          );
+          drawLowerDisplay(leftOperant);
+          rightOperant = null;
+        }
+      }
+      //
+    } else if (userInput === "=") {
+      // Input is equal-sign
       rightOperant = arrayToNumber();
       inputSequence = [];
       leftOperant = calcExpression();
       drawLowerDisplay(leftOperant);
-      operator = userInput;
       drawUpperDisplay(
-        upperDisplayTarget.innerHTML + " " + rightOperant + " " + operator
+        upperDisplayTarget.innerHTML + " " + rightOperant + " ="
       );
-      rightOperant = null;
+      drawHistory();
+      equalCache = true;
     }
-  } else if (userInput === "=") {
-    // Input is equal-sign
-    rightOperant = arrayToNumber();
-    inputSequence = [];
-    leftOperant = calcExpression();
-    drawLowerDisplay(leftOperant);
-    drawUpperDisplay(upperDisplayTarget.innerHTML + " " + rightOperant + " =");
-    drawHistory();
-    equalCache = true;
-  } else if (userInput === "CE") {
+  }
+  if (userInput === "CE") {
     // Input is CE
-    console.log("Der Befehl " + userInput);
+    drawHistory("clear");
+    drawLowerDisplay("clear");
+    drawUpperDisplay("clear");
+    inputSequence = [];
+    leftOperant = null;
+    rightOperant = null;
+    operator = null;
+    equalCache = false;
   }
 }
 
@@ -90,19 +127,22 @@ function drawUpperDisplay(option) {
   }
 }
 
-function drawHistory() {
-  const historyResult = document.createElement("li");
-  historyResult.classList.add("history-result");
-  historyResult.textContent = lowerDisplayTarget.innerHTML;
-  historyList.prepend(historyResult);
-  const historyCalc = document.createElement("li");
-  historyCalc.classList.add("history-calc");
-  historyCalc.textContent = upperDisplayTarget.innerHTML;
-  historyList.prepend(historyCalc);
+function drawHistory(option) {
+  if (option === "clear") {
+    historyList.innerHTML = "";
+  } else {
+    const historyResult = document.createElement("li");
+    historyResult.classList.add("history-result");
+    historyResult.textContent = lowerDisplayTarget.innerHTML;
+    historyList.prepend(historyResult);
+    const historyCalc = document.createElement("li");
+    historyCalc.classList.add("history-calc");
+    historyCalc.textContent = upperDisplayTarget.innerHTML;
+    historyList.prepend(historyCalc);
+  }
 }
 
 drawLowerDisplay("clear");
-drawUpperDisplay("clear");
 
 // Eventlistener to intercept button-inputs
 const btnField = document.querySelector(".btn-field");

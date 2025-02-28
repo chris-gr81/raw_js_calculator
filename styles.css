@@ -52,6 +52,7 @@ body {
 .upper-display {
   font-size: 1.5rem;
   margin-bottom: 1rem;
+  min-height: 2rem;
 }
 .btn-field {
   display: grid;
