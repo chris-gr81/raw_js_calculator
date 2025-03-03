@@ -62,7 +62,9 @@ function processOperator(userInput) {
       calculator.operator = userInput;
     } else {
       calculator.rightOperant = arrayToNumber();
-      calculator.leftOperant = calcExpression();
+      [leftOperant, rightOperant, operator, result] = calcExpression();
+      calculator.leftOperant = result;
+      renderHistory(leftOperant, operator, rightOperant, result);
       calculator.operator = userInput;
     }
     calculator.inputSequence = [];
@@ -79,7 +81,10 @@ function processOperator(userInput) {
 function processEquals(userInput) {
   calculator.rightOperant = arrayToNumber();
   calculator.inputSequence = [];
-  calculator.leftOperant = calcExpression();
+  [leftOperant, rightOperant, operator, result] = calcExpression();
+  console.log(leftOperant, rightOperant, operator, result);
+  calculator.leftOperant = result;
+  renderHistory(leftOperant, operator, rightOperant, result);
 
   renderLowerDisplay(calculator.leftOperant);
   renderUpperDisplay(
@@ -121,8 +126,13 @@ function calcExpression() {
   } else if (calculator.operator === "/") {
     result = calculator.leftOperant / calculator.rightOperant;
   }
-  renderHistory(result);
-  return result;
+
+  return [
+    calculator.leftOperant,
+    calculator.rightOperant,
+    calculator.operator,
+    result,
+  ];
 }
 
 function renderLowerDisplay(option) {
@@ -140,17 +150,17 @@ function renderUpperDisplay(option) {
   }
 }
 
-function renderHistory(option) {
-  if (option === "clear") {
+function renderHistory(...options) {
+  if (options[0] === "clear") {
     historyList.innerHTML = "";
   } else {
     const historyResult = document.createElement("li");
     historyResult.classList.add("history-result");
-    historyResult.textContent = option;
+    historyResult.textContent = options[3];
     historyList.prepend(historyResult);
     const historyCalc = document.createElement("li");
     historyCalc.classList.add("history-calc");
-    historyCalc.textContent = `${calculator.leftOperant} ${calculator.operator} ${calculator.rightOperant} =`;
+    historyCalc.textContent = `${options[0]} ${options[1]} ${options[2]} =`;
     historyList.prepend(historyCalc);
   }
 }
