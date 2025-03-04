@@ -82,10 +82,8 @@ function processEquals(userInput) {
   calculator.rightOperant = arrayToNumber();
   calculator.inputSequence = [];
   [leftOperant, rightOperant, operator, result] = calcExpression();
-  console.log(leftOperant, rightOperant, operator, result);
   calculator.leftOperant = result;
   renderHistory(leftOperant, operator, rightOperant, result);
-
   renderLowerDisplay(calculator.leftOperant);
   renderUpperDisplay(
     upperDisplay.innerHTML + " " + calculator.rightOperant + " ="
@@ -95,7 +93,7 @@ function processEquals(userInput) {
 }
 
 function processClear(userInput) {
-  renderHistory("clear");
+  historyList.innerHTML = "";
   renderLowerDisplay("clear");
   renderUpperDisplay("clear");
   calculator.inputSequence = [];
@@ -142,6 +140,7 @@ function renderLowerDisplay(option) {
     lowerDisplay.innerHTML = option;
   }
 }
+
 function renderUpperDisplay(option) {
   if (option === "clear") {
     upperDisplay.innerHTML = "";
@@ -150,19 +149,15 @@ function renderUpperDisplay(option) {
   }
 }
 
-function renderHistory(...options) {
-  if (options[0] === "clear") {
-    historyList.innerHTML = "";
-  } else {
-    const historyResult = document.createElement("li");
-    historyResult.classList.add("history-result");
-    historyResult.textContent = options[3];
-    historyList.prepend(historyResult);
-    const historyCalc = document.createElement("li");
-    historyCalc.classList.add("history-calc");
-    historyCalc.textContent = `${options[0]} ${options[1]} ${options[2]} =`;
-    historyList.prepend(historyCalc);
-  }
+function renderHistory(leftOps, operator, rightOps, result) {
+  const historyResult = document.createElement("li");
+  historyResult.classList.add("history-result");
+  historyResult.textContent = result;
+  historyList.prepend(historyResult);
+  const historyCalc = document.createElement("li");
+  historyCalc.classList.add("history-calc");
+  historyCalc.textContent = `${leftOps} ${operator} ${rightOps} =`;
+  historyList.prepend(historyCalc);
 }
 
 renderLowerDisplay("clear");
